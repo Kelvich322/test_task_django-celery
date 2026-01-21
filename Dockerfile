@@ -13,7 +13,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-RUN mkdir -p /app/staticfiles && \
-    chown -R appuser:appuser /app/staticfiles
-
 CMD ["sh", "-c", "cd /app/src && gunicorn --bind 0.0.0.0:8000 --workers 4 core.wsgi:application"]

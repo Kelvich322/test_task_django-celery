@@ -7,7 +7,7 @@ down:
 	docker compose down
 
 up-build:
-	docker compose up
+	docker compose up --build
 
 down-clean:
 	docker compose down -v --remove-orphans

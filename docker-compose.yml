@@ -48,7 +48,6 @@ services:
       REDIS_URL: ${REDIS_URL}
       CELERY_BROKER_URL: ${CELERY_BROKER_URL}
       CELERY_RESULT_BACKEND: ${CELERY_RESULT_BACKEND}
-      PYTHONPATH: /app/src
     ports:
       - "8000:8000"
     depends_on:
@@ -63,7 +62,6 @@ services:
     command: >
       sh -c "
         python manage.py migrate &&
-        python manage.py collectstatic --noinput &&
         gunicorn --bind 0.0.0.0:8000 --workers 4 src.core.wsgi:application
       "
 

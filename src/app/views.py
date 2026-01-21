@@ -35,11 +35,21 @@ class PayoutViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-
-        payout = PayoutService.create_payout(serializer.validated_data)
-
-        response_serializer = PayoutSerializer(payout)
-        return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+        
+        try:
+            payout = PayoutService.create_payout(serializer.validated_data)
+            submitted_payout = PayoutService.submit_payout(payout.id)
+            response_serializer = PayoutSerializer(submitted_payout)
+            return Response(
+                response_serializer.data, 
+                status=status.HTTP_201_CREATED
+            )
+            
+        except Exception as e:       
+            return Response(
+                    {"error": str(e)}, 
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()

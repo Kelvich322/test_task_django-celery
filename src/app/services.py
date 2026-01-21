@@ -1,9 +1,10 @@
 import logging
+
 from django.db import transaction
+
 from src.app.exceptions import InvalidStatusTransitionError
 from src.app.models import Payout, StatusChoices
 from src.app.tasks import process_single_payout_task
-
 
 logger = logging.getLogger(__name__)
 

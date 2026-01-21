@@ -3,7 +3,6 @@ from pathlib import Path
 
 import environ
 
-
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 env = environ.Env(
@@ -34,7 +33,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "django_filters",
-    'drf_spectacular',
+    "drf_spectacular",
     "src.app",
 ]
 
@@ -105,7 +104,7 @@ USE_TZ = True
 
 
 # Static files (CSS, JavaScript, Images)
-STATIC_URL = '/static/'
+STATIC_URL = "/static/"
 
 # DRF
 REST_FRAMEWORK = {
@@ -116,14 +115,14 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
     "PAGE_SIZE": 20,
-    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Payouts API',
-    'DESCRIPTION': 'Документация API для системы управления выплатами',
-    'VERSION': '1.0.0',
-    'SERVE_INCLUDE_SCHEMA': False
+    "TITLE": "Payouts API",
+    "DESCRIPTION": "Документация API для системы управления выплатами",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
 }
 
 # Celery/Redis

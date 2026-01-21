@@ -1,9 +1,11 @@
 import logging
+import random
+import time
+
 from celery import shared_task
 from celery.exceptions import MaxRetriesExceededError
-import time
-import random
 from django.db import transaction
+
 from .models import Payout, StatusChoices
 
 logger = logging.getLogger(__name__)

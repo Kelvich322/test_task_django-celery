@@ -1,16 +1,16 @@
-from rest_framework import viewsets, status, filters
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django_filters.rest_framework import DjangoFilterBackend
 
+from src.app.exceptions import InvalidStatusTransitionError
 from src.app.models import Payout, StatusChoices
 from src.app.serializers import (
-    PayoutSerializer,
     PayoutCreateSerializer,
+    PayoutSerializer,
     PayoutUpdateSerializer,
 )
 from src.app.services import PayoutService
-from src.app.exceptions import InvalidStatusTransitionError
 
 
 class PayoutViewSet(viewsets.ModelViewSet):
@@ -35,21 +35,15 @@ class PayoutViewSet(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        
+
         try:
             payout = PayoutService.create_payout(serializer.validated_data)
             submitted_payout = PayoutService.submit_payout(payout.id)
             response_serializer = PayoutSerializer(submitted_payout)
-            return Response(
-                response_serializer.data, 
-                status=status.HTTP_201_CREATED
-            )
-            
-        except Exception as e:       
-            return Response(
-                    {"error": str(e)}, 
-                    status=status.HTTP_400_BAD_REQUEST
-                )
+            return Response(response_serializer.data, status=status.HTTP_201_CREATED)
+
+        except Exception as e:
+            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
 
     def partial_update(self, request, *args, **kwargs):
         instance = self.get_object()

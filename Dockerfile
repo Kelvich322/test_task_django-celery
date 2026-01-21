@@ -1,15 +1,14 @@
 FROM python:3.12
 
-RUN apt-get update && apt-get install -y \
-    gcc \
-    libpq-dev \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
 WORKDIR /app
 
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN apt-get update && apt-get install -y zlib1g-dev make
+
+RUN pip install uv
+
+COPY uv.lock pyproject.toml ./
+
+RUN uv pip install --system -r pyproject.toml
 
 COPY . .
 

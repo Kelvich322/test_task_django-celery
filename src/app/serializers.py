@@ -1,13 +1,15 @@
 from rest_framework import serializers
+
 from .models import Payout, StatusChoices
 
 
 class PayoutSerializer(serializers.ModelSerializer):
     details = serializers.DictField(
-    required=False,
-    allow_null=True,
-    help_text="Recipient details in JSON format. Fields 'recipient_name' and 'method' required",
+        required=False,
+        allow_null=True,
+        help_text="Recipient details in JSON format. Fields 'recipient_name' and 'method' required",
     )
+
     class Meta:
         model = Payout
         fields = [

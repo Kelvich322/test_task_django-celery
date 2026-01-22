@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 import environ
+from celery.schedules import crontab
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -130,3 +131,9 @@ REDIS_URL = env("REDIS_URL", default="redis://redis:6379/0")
 CELERY_BROKER_URL = env("CELERY_BROKER_URL", default=REDIS_URL)
 CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default=REDIS_URL)
 CELERY_TIMEZONE = "Europe/Moscow"
+CELERY_BEAT_SCHEDULE = {
+    "check-stalled-payouts-every-10-min": {
+        "task": "src.app.tasks.sanity_task.check_stalled_payouts",
+        "schedule": crontab(minute="*/10"),
+    },
+}

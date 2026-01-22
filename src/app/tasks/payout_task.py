@@ -6,7 +6,7 @@ from celery import shared_task
 from celery.exceptions import MaxRetriesExceededError
 from django.db import transaction
 
-from .models import Payout, StatusChoices
+from src.app.models import Payout, StatusChoices
 
 logger = logging.getLogger(__name__)
 

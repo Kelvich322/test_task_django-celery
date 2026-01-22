@@ -1,4 +1,4 @@
-.PHONY: up down up-build down-clean restart lint
+.PHONY: up down up-build down-clean restart lint test
 
 up:
 	docker compose up
@@ -18,3 +18,6 @@ restart:
 lint:
 	uv run ruff format .
 	uv run ruff check --fix .
+
+test:
+	pytest -v

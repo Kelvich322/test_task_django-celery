@@ -1,4 +1,5 @@
 import os
+import sys
 from pathlib import Path
 
 import environ
@@ -79,6 +80,23 @@ DATABASES = {
         },
     }
 }
+
+# Tests
+if "test" in sys.argv or "pytest" in sys.modules:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": ":memory:",
+        }
+    }
+
+    SECRET_KEY = "test-secret-key-for-tests-only"
+
+    REST_FRAMEWORK = {
+        "TEST_REQUEST_DEFAULT_FORMAT": "json",
+        "DEFAULT_AUTHENTICATION_CLASSES": [],
+        "DEFAULT_PERMISSION_CLASSES": [],
+    }
 
 # Password validators
 AUTH_PASSWORD_VALIDATORS = [

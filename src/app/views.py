@@ -3,7 +3,6 @@ from rest_framework import filters, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
 
-from src.app.exceptions import InvalidStatusTransitionError
 from src.app.models import Payout, StatusChoices
 from src.app.serializers import (
     PayoutCreateSerializer,
@@ -49,25 +48,8 @@ class PayoutViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         serializer = self.get_serializer(instance, data=request.data, partial=True)
         serializer.is_valid(raise_exception=True)
-
-        try:
-            if "status" in serializer.validated_data:
-                new_status = serializer.validated_data["status"]
-
-                if new_status == StatusChoices.PROCESSING:
-                    PayoutService.submit_payout(instance.id)
-                else:
-                    instance.status = new_status
-                    instance.save()
-            else:
-                for attr, value in serializer.validated_data.items():
-                    setattr(instance, attr, value)
-                instance.save()
-
-            return Response(self.get_serializer(instance).data)
-
-        except (InvalidStatusTransitionError, ValueError) as e:
-            return Response({"error": str(e)}, status=status.HTTP_400_BAD_REQUEST)
+        updated_instance = serializer.save()
+        return Response(self.get_serializer(updated_instance).data)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()

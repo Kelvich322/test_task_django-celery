@@ -1,5 +1,7 @@
 from rest_framework import serializers
 
+from src.app.services import PayoutService
+
 from .models import Payout, StatusChoices
 
 
@@ -54,6 +56,17 @@ class PayoutUpdateSerializer(PayoutSerializer):
             "payment_amount",
             "currency",
         ]
+
+    def update(self, instance, validated_data):
+        if "status" in validated_data:
+            new_status = validated_data["status"]
+
+            if new_status == StatusChoices.PROCESSING:
+                PayoutService.submit_payout(instance.id)
+                instance.refresh_from_db()
+                return instance
+
+        return super().update(instance, validated_data)
 
     def validate_status(self, value):
         instance_status = self.instance.status if self.instance else None
